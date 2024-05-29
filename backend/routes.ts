@@ -108,6 +108,79 @@ export const createRoutes = (dbPool: Pool): Router => {
     });
 
 
+
+
+    // Route to get user info
+    router.get('/user_info/:userID', (req, res) => {
+        const query = `SELECT * FROM user_info WHERE UserID = ?`;
+        const userID = req.params.userID;
+
+        dbPool.query(query, [userID], (error, results) => {
+            if (error) {
+                console.error('Failed to get all info from User', error);
+                return res.status(500).send('Failed to get all info from User');
+            }
+            res.send(results);
+            res.status(200);
+        });
+    });
+
+        
+    // Route to get workout info
+    router.get('/workout_info/:userID', (req, res) => {
+        const query = 'SELECT * FROM workouts WHERE UserID = ?';
+        const userID = req.params.userID;
+    
+        dbPool.query(query, [userID], (error, results) => {
+            if (error) {
+                console.error('Failed to get workout info for User', error);
+                return res.status(500).send('Failed to get workout info for User');
+            }
+            res.send(results);
+            res.status(200);
+        });
+    });
+    
+    
+    // Route to get exercise info
+    router.get('/exercise_info/:userID', (req, res) => {
+        const query = `
+            SELECT e.* 
+            FROM exercises e
+            JOIN workouts w ON e.Workout_ID = w.Workout_ID
+            WHERE w.UserID = ?;`;
+        const userID = req.params.userID;
+
+    
+        dbPool.query(query, [userID], (error, results) => {
+            if (error) {
+                console.error('Failed to get exercise info for User', error);
+                return res.status(500).send('Failed to get exercise info for User');
+            }
+            res.send(results);
+            res.status(200);
+        });
+    });
+    
+    
+    // Route to get nutrition info
+    router.get('/nutrition_info/:userID', (req, res) => {
+        const query = 'SELECT * FROM nutrition_water WHERE UserID = ?';
+        const userID = req.params.userID;
+
+    
+        dbPool.query(query, [userID], (error, results) => {
+            if (error) {
+                console.error('Failed to get nutrition info for User', error);
+                return res.status(500).send('Failed to get nutrition info for User');
+            }
+            res.send(results);
+            res.status(200);
+        });
+    });
+    
+
+
     return router;
 };
 export default createRoutes;
