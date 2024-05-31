@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { Pool } from 'mysql';
 import createRegisterRoutes from './auth/register';
+import createLoginRoutes from './auth/login';
 
 // Function to create and return the router
 export const createRoutes = (dbPool: Pool): Router => {
@@ -19,7 +20,7 @@ export const createRoutes = (dbPool: Pool): Router => {
     });
     
     router.use(createRegisterRoutes(dbPool)); // Use the register route
-                                            // add in login route
+    router.use(createLoginRoutes(dbPool)); // Use the login route
     // More routes can be added here
 
     // POST route to add a workout
