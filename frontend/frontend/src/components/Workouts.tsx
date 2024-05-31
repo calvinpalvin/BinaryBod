@@ -46,7 +46,7 @@ const Workouts: React.FC = () => {
   const [data, setData] = useState<any>([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/workout_info/3')
+    axios.get('http://localhost:3000/workout_info/10')
       .then(response => {
         setData(response.data);
       })
