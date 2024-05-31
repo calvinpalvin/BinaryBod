@@ -7,6 +7,8 @@ import AddExercises from './components/AddExercises';
 import Workouts from './components/Workouts';
 import AddWorkouts from './components/AddWorkouts'
 import Nutrition from './components/Nutrition';
+import AddNutrition from './components/AddNutrition';
+
 
 
 const App: React.FC = () => {
@@ -23,6 +25,8 @@ const App: React.FC = () => {
           <Route path="/exercises" element={<Exercises />} />
           <Route path="/exercises/add" element={<AddExercises />} />
           <Route path="/nutrition" element={<Nutrition />} />
+          <Route path="/nutrition/add" element={<AddNutrition />} />
+
 
         </Routes>
       </div>
