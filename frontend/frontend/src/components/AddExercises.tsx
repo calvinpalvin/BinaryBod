@@ -10,15 +10,16 @@ import { useNavigate } from 'react-router-dom';
 const AddExercises: React.FC = () => {
   const navigate = useNavigate();
   const [exerciseData, setExerciseData] = useState({
-    // exerciseID: '', // Add exerciseID to the initial state
-    workoutID: '', // Add workoutID to the initial state
+    // exerciseID: '',
+    workoutID: '',
     exerciseName: '',
     muscleGroup: '',
-    difficultyLevel: '',
+    experienceLevel: '',
     sets: '',
     reps: '',
+    equipmentNeeded: ''
   });
-
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setExerciseData({
@@ -29,34 +30,37 @@ const AddExercises: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Set the exerciseID and userID before sending the request
+    // Set the exerciseID and workoutID before sending the request
     const exerciseDataWithIDs = {
       ...exerciseData,
-    //   exerciseID: 26, // Set the exercise ID
-      workoutID: 11, // Set the workoutID 
+      // exerciseID: 26, // Set the exercise ID
+      workoutID: 11, // Set the workoutID
+      recommendedSetsReps: `${exerciseData.sets} sets of ${exerciseData.reps} reps`
     };
     axios.post('http://localhost:3000/exercises/add', exerciseDataWithIDs)
       .then(response => {
         console.log('Exercise added successfully', response);
         // Clear the form or show a success message
         setExerciseData({
-        //   exerciseID: '',
-          workoutID: '', 
+          // exerciseID: '',
+          workoutID: '',
           exerciseName: '',
           muscleGroup: '',
-          difficultyLevel: '',
+          experienceLevel: '',
           sets: '',
           reps: '',
+          equipmentNeeded: ''
         });
         // Navigate back to /exercises
         navigate('/exercises');
       })
       .catch(error => {
         console.error('There was an error adding the exercise!', error);
+        console.log('Error details:', error.response ? error.response.data : error.message);
       });
   };
 
-  const difficultyLevels = [
+  const experienceLevels = [
     {
       value: 'Beginner',
       label: 'Beginner',
@@ -106,14 +110,14 @@ const AddExercises: React.FC = () => {
       />
       <TextField
         select
-        label="Difficulty Level"
-        name="difficultyLevel"
-        value={exerciseData.difficultyLevel}
+        label="Experience Level"
+        name="experienceLevel"
+        value={exerciseData.experienceLevel}
         onChange={handleChange}
         required
         fullWidth
       >
-        {difficultyLevels.map((option) => (
+        {experienceLevels.map((option) => (
           <MenuItem key={option.value} value={option.value}>
             {option.label}
           </MenuItem>
@@ -135,6 +139,13 @@ const AddExercises: React.FC = () => {
         value={exerciseData.reps}
         onChange={handleChange}
         required
+        fullWidth
+      />
+      <TextField
+        label="Equipment Needed"
+        name="equipmentNeeded"
+        value={exerciseData.equipmentNeeded}
+        onChange={handleChange}
         fullWidth
       />
       <Button variant="contained" color="primary" type="submit">
