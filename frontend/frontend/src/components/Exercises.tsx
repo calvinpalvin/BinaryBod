@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -61,6 +62,15 @@ const Exercises: React.FC = () => {
   );
 
   return (
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh',
+        backgroundColor: '#f5f5f5',
+      }}
+      >
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
@@ -87,6 +97,7 @@ const Exercises: React.FC = () => {
         </TableBody>
       </Table>
     </TableContainer>
+    </Box>
   );
 }
 

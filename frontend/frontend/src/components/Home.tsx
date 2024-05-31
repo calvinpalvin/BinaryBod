@@ -43,6 +43,15 @@ const Home: React.FC = () => {
     // </div>
 
     return (
+      <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh',
+        backgroundColor: '#f5f5f5',
+      }}
+      >
         <Card sx={{ minWidth: 275 }}>
           <CardContent>
             {data ? (
@@ -73,6 +82,7 @@ const Home: React.FC = () => {
             )}
           </CardContent>
         </Card>
+        </Box>
       );
     };
 

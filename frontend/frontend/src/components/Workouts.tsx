@@ -8,6 +8,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import axios from 'axios';
+import Button from '@mui/material/Button';
+import { Link } from 'react-router-dom';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -61,6 +63,7 @@ const Workouts: React.FC = () => {
   );
 
   return (
+    <div>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
@@ -87,6 +90,11 @@ const Workouts: React.FC = () => {
         </TableBody>
       </Table>
     </TableContainer>
+
+    <Button variant="contained" component={Link} to="/workout/add"> 
+    Add Workout
+    </Button>
+    </div>
   );
 }
 

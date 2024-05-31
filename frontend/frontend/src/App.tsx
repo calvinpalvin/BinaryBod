@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Home from './components/Home';
 import Exercises from './components/Exercises';
 import Workouts from './components/Workouts';
+import AddWorkouts from './components/AddWorkouts'
 import Nutrition from './components/Nutrition';
 
 const App: React.FC = () => {
@@ -16,6 +17,7 @@ const App: React.FC = () => {
           <Route path="/dashboard" element={<Home />} />
           {/* <Route path="/account" element={<Home />} /> */}
           <Route path="/workouts" element={<Workouts />} />
+          <Route path="/workout/add" element={<AddWorkouts />} />
           <Route path="/exercises" element={<Exercises />} />
           <Route path="/nutrition" element={<Nutrition />} />
 
