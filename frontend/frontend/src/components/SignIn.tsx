@@ -16,6 +16,7 @@ import BBlogo from "./Binary_Bod_Logo.png";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useUser } from './UserContext';
 
 function Copyright(props: any) {
   return (
@@ -35,6 +36,7 @@ const defaultTheme = createTheme();
 
 export default function SignInSide() {
   const navigate = useNavigate();
+  const { login } = useUser();
   const [userData, setUserData] = useState({
     username: '',
     password: ''
@@ -59,11 +61,13 @@ export default function SignInSide() {
     axios.post('http://localhost:3000/login', userData)
       .then(response => {
         console.log('Logged in successfully', response);
+        login(response.data);
         // Clear the form or show a success message
         setUserData({
           username: '',
           password: ''
         });
+      
         // Navigate back to /
         navigate('/dashboard');
       })

@@ -11,7 +11,8 @@ import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
-
+import Typography from '@mui/material/Typography';
+import { useUser } from './UserContext';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -34,69 +35,76 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function createData(
-  exerciseNames: string,
+  exerciseName: string,
   muscleGroup: string,
   experienceLevel: string,
   setsReps: string,
   equipmentNeeded: string,
 ) {
-  return { workoutName: exerciseNames, muscleGroup, experienceLevel, duration: setsReps, equipmentNeeded };
+  return { exerciseName, muscleGroup, experienceLevel, setsReps, equipmentNeeded };
 }
 
-
-
 const Exercises: React.FC = () => {
-  const [data, setData] = useState<any>([]);
+  const [data, setData] = useState<any[]>([]);
+  const { user } = useUser();
 
   useEffect(() => {
-    axios.get('http://localhost:3000/exercise_info/10')
-      .then(response => {
-        setData(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
-  }, []);
+    if (user) {
+      axios.get(`http://localhost:3000/exercise_info/${user.id}`)
+        .then(response => {
+          setData(response.data);
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+    }
+  }, [user]);
 
-
-  const rows = data.map((exercises: { Exercise_Name: string; Muscle_Group: string; Experience_Level: string; Recommended_Sets_Reps: string; Equipment_Needed: string; }) => 
-    createData(exercises.Exercise_Name, exercises.Muscle_Group, exercises.Experience_Level, exercises.Recommended_Sets_Reps, exercises.Equipment_Needed)
+  const rows = data.map((exercise: { Exercise_Name: string; Muscle_Group: string; Experience_Level: string; Recommended_Sets_Reps: string; Equipment_Needed: string; }) => 
+    createData(exercise.Exercise_Name, exercise.Muscle_Group, exercise.Experience_Level, exercise.Recommended_Sets_Reps, exercise.Equipment_Needed)
   );
+
+  if (!user) {
+    return (
+      <Typography variant="h6" align="center">
+      Please <Link to="/"> sign in</Link> to view your exercises.
+      </Typography>
+    );
+  }
 
   return (
     <div>
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Exercise Name </StyledTableCell>
-            <StyledTableCell align="right">Muscle Group</StyledTableCell>
-            <StyledTableCell align="right">Experience Level</StyledTableCell>
-            <StyledTableCell align="right">Recommended Sets & Reps</StyledTableCell>
-            <StyledTableCell align="right">Equipment Needed</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row: { workoutName: string; muscleGroup: string; experienceLevel: string; duration: string | number; equipmentNeeded: string; }) => (
-            <StyledTableRow key={row.workoutName}>
-              <StyledTableCell component="th" scope="row">
-                {row.workoutName}
-              </StyledTableCell>
-              <StyledTableCell align="right">{row.muscleGroup}</StyledTableCell>
-              <StyledTableCell align="right">{row.experienceLevel}</StyledTableCell>
-              <StyledTableCell align="right">{row.duration}</StyledTableCell>
-              <StyledTableCell align="right">{row.equipmentNeeded}</StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-    
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 700 }} aria-label="customized table">
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>Exercise Name</StyledTableCell>
+              <StyledTableCell align="right">Muscle Group</StyledTableCell>
+              <StyledTableCell align="right">Experience Level</StyledTableCell>
+              <StyledTableCell align="right">Recommended Sets & Reps</StyledTableCell>
+              <StyledTableCell align="right">Equipment Needed</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row: { exerciseName: string; muscleGroup: string; experienceLevel: string; setsReps: string; equipmentNeeded: string; }) => (
+              <StyledTableRow key={row.exerciseName}>
+                <StyledTableCell component="th" scope="row">
+                  {row.exerciseName}
+                </StyledTableCell>
+                <StyledTableCell align="right">{row.muscleGroup}</StyledTableCell>
+                <StyledTableCell align="right">{row.experienceLevel}</StyledTableCell>
+                <StyledTableCell align="right">{row.setsReps}</StyledTableCell>
+                <StyledTableCell align="right">{row.equipmentNeeded}</StyledTableCell>
+              </StyledTableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
 
-    <Button variant="contained" component={Link} to="/exercises/add"> 
-    Add Exercises
-    </Button>
-  </div>
+      <Button variant="contained" component={Link} to="/exercises/add">
+        Add Exercise
+      </Button>
+    </div>
   );
 }
 
