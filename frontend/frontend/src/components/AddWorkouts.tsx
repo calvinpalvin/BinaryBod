@@ -32,7 +32,7 @@ const AddWorkout: React.FC = () => {
     // Set the workoutID and userID before sending the request
     const workoutDataWithIDs = {
       ...workoutData,
-      workoutID: 20, // Set the workout ID
+      // workoutID: 20, // Set the workout ID
       userID: 10, // Replace with the actual user ID
     };
     axios.post('http://localhost:3000/workout/add', workoutDataWithIDs)
