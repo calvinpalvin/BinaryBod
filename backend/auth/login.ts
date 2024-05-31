@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 
 const SECRET_KEY = 'your_secret_key'; // Replace with your actual secret key
 
-const createLoginRoutes = (dbPool: Pool): Router => {
+export const createLoginRoutes = (dbPool: Pool): Router => {
     const router = Router();
 
     // POST route to login a user
