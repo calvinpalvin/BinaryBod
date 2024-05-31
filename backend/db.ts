@@ -6,7 +6,7 @@ export const initializeDatabase = (): mysql.Pool => {
         host: 'localhost',
         user: 'test',
         password: 'test',
-        database: 'binarybod'
+        database: 'binaryBod'
     });
 
     pool.on('acquire', (connection) => {
