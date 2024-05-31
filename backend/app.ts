@@ -4,7 +4,7 @@ import { initializeDatabase } from './db';
 import { createRoutes } from './routes'; // Import the function to create routes
 
 const app = express();
-const port = 3000;
+const port = 3000 || 3001;
 const dbPool = initializeDatabase(); // Initialize the database connection pool
 
 // Middleware
