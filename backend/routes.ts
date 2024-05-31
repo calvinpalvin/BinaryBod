@@ -19,7 +19,7 @@ export const createRoutes = (dbPool: Pool): Router => {
     });
     
     router.use(createRegisterRoutes(dbPool)); // Use the register route
-                                            // add in login route
+    router.use(CreateLoginRoutes(dbPool)); // Use the login route
     // More routes can be added here
 
     // POST route to add a workout
