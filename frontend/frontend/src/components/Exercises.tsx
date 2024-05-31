@@ -9,6 +9,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import axios from 'axios';
+import Button from '@mui/material/Button';
+import { Link } from 'react-router-dom';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -62,15 +64,7 @@ const Exercises: React.FC = () => {
   );
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '100vh',
-        backgroundColor: '#f5f5f5',
-      }}
-      >
+    <div>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
@@ -97,7 +91,12 @@ const Exercises: React.FC = () => {
         </TableBody>
       </Table>
     </TableContainer>
-    </Box>
+    
+
+    <Button variant="contained" component={Link} to="/exercises/add"> 
+    Add Exercises
+    </Button>
+  </div>
   );
 }
 
