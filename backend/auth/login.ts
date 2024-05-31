@@ -57,7 +57,7 @@ export const createLoginRoutes = (dbPool: Pool): Router => {
                 // Generate a new JWT token
                 const token = jwt.sign({ userID: user.UserID, username: user.Username }, SECRET_KEY, { expiresIn: '1h' });
 
-                res.status(200).json({ message: 'Login successful', token });
+                res.status(200).json({ message: 'Login successful', token, userID: user.UserID});
             });
         });
     });

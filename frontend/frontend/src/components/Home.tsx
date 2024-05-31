@@ -26,6 +26,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     if (user) {
+      console.log(user.id);
       axios.get(`http://localhost:3000/user_info/${user.id}`)
         .then(response => {
           setData(response.data[0]);

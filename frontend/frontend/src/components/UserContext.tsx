@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface User {
   id: number;
-  username: string;
+  // username: string;
   // Add other user properties if needed
 }
 
@@ -20,6 +20,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const login = (userData: User) => {
     setUser(userData);
+    console.log('User logged in:', userData);
   };
 
   const logout = () => {

@@ -61,7 +61,10 @@ export default function SignInSide() {
     axios.post('http://localhost:3000/login', userData)
       .then(response => {
         console.log('Logged in successfully', response);
-        login(response.data);
+        // login(response.data);
+        // const { token, UserID } = response.data;
+        // Call the login function with the UserID
+        login({ id: response.data.userID });
         // Clear the form or show a success message
         setUserData({
           username: '',
