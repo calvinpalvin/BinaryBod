@@ -120,8 +120,8 @@ export const createRoutes = (dbPool: Pool): Router => {
                 console.error('Failed to get all info from User', error);
                 return res.status(500).send('Failed to get all info from User');
             }
-            res.send(results);
-            res.status(200);
+            // res.send(results);
+            res.status(200).json(results);
         });
     });
 
