@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 
 const SECRET_KEY = 'your_secret_key'; // Replace with your actual secret key
 
-export const createRoutes = (dbPool: Pool): Router => {
+export const createRegisterRoutes = (dbPool: Pool): Router => {
     const router = Router();
 
     // POST route to register a user
@@ -33,7 +33,7 @@ export const createRoutes = (dbPool: Pool): Router => {
             // Insert user into user_info table
             const userQuery = `
                 INSERT INTO user_info (Username, Fname, Lname, Email, DOB, Weight, Gender)
-                VALUES ($1, $2, $3, $4, $5, $6, $7)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
             `;
 
             dbPool.query(userQuery, [username, fName, lName, email, dob, weight, gender], (userError, userResults) => {
@@ -71,4 +71,4 @@ export const createRoutes = (dbPool: Pool): Router => {
     return router;
 };
 
-export default createRoutes;
+export default createRegisterRoutes;
