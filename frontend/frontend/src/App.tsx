@@ -8,6 +8,8 @@ import Workouts from './components/Workouts';
 import AddWorkouts from './components/AddWorkouts'
 import Nutrition from './components/Nutrition';
 import AddNutrition from './components/AddNutrition';
+import SignUp from './components/SignUp';
+import SignIn from './components/SignIn';
 
 
 
@@ -17,7 +19,8 @@ const App: React.FC = () => {
       <div>
         <Navbar />
         <Routes>
-          <Route path="/" element={<p>Hello world!</p>} />
+          <Route path="/" element={<SignIn />} />
+          <Route path="/signUp" element={<SignUp />} />
           <Route path="/dashboard" element={<Home />} />
           {/* <Route path="/account" element={<Home />} /> */}
           <Route path="/workouts" element={<Workouts />} />
