@@ -6,11 +6,12 @@ import Typography from '@mui/material/Typography';
 import axios from 'axios';
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from './UserContext';
 
 const AddWorkout: React.FC = () => {
   const navigate = useNavigate();
+  const { user } = useUser();
   const [workoutData, setWorkoutData] = useState({
-    workoutID: '', // Add workoutID to the initial state
     userID: '', // Add userID to the initial state
     workoutName: '',
     muscleGroup: '',
@@ -29,24 +30,26 @@ const AddWorkout: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Set the workoutID and userID before sending the request
+    if(!user) {
+      console.error('User is not logged in!')
+      return;
+    }
+    // Set the userID before sending the request
     const workoutDataWithIDs = {
       ...workoutData,
-      // workoutID: 20, // Set the workout ID
-      userID: 10, // Replace with the actual user ID
+      userID: user.id, // Replace with the actual user ID
     };
     axios.post('http://localhost:3000/workout/add', workoutDataWithIDs)
       .then(response => {
         console.log('Workout added successfully', response);
         // Clear the form or show a success message
         setWorkoutData({
-          workoutID: '',
           userID: '',
           workoutName: '',
           muscleGroup: '',
           experienceLevel: '',
           duration: '',
-          equipmentNeeded: '',
+          equipmentNeeded: ''
         });
         // Navigate back to /workouts
         navigate('/workouts');

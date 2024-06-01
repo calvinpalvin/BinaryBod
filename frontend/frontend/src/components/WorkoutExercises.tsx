@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Box from '@mui/material/Box';
+import { useParams, Link } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -9,10 +9,10 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import axios from 'axios';
-import Button from '@mui/material/Button';
-import { Link } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import { useUser } from './UserContext';
+import Box from '@mui/material/Box';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -28,7 +28,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
     backgroundColor: theme.palette.action.hover,
   },
-  // hide last border
   '&:last-child td, &:last-child th': {
     border: 0,
   },
@@ -44,13 +43,14 @@ function createData(
   return { exerciseName, muscleGroup, experienceLevel, setsReps, equipmentNeeded };
 }
 
-const Exercises: React.FC = () => {
+const WorkoutExercises: React.FC = () => {
+  const { workoutID } = useParams<{ workoutID: string }>();
   const [data, setData] = useState<any[]>([]);
   const { user } = useUser();
 
   useEffect(() => {
-    if (user) {
-      axios.get(`http://localhost:3000/exercise_info/`)
+    if (user && workoutID) {
+      axios.get(`http://localhost:3000/exercises/${workoutID}`)
         .then(response => {
           setData(response.data);
         })
@@ -58,7 +58,7 @@ const Exercises: React.FC = () => {
           console.error('Error fetching data:', error);
         });
     }
-  }, [user]);
+  }, [user, workoutID]);
 
   const rows = data.map((exercise: { Exercise_Name: string; Muscle_Group: string; Experience_Level: string; Recommended_Sets_Reps: string; Equipment_Needed: string; }) => 
     createData(exercise.Exercise_Name, exercise.Muscle_Group, exercise.Experience_Level, exercise.Recommended_Sets_Reps, exercise.Equipment_Needed)
@@ -67,7 +67,7 @@ const Exercises: React.FC = () => {
   if (!user) {
     return (
       <Typography variant="h6" align="center">
-      Please <Link to="/"> sign in</Link> to view your exercises.
+        Please <Link to="/">sign in</Link> to view your exercises.
       </Typography>
     );
   }
@@ -75,22 +75,23 @@ const Exercises: React.FC = () => {
   return (
     <div>
       <Typography variant="h4" align="center" gutterBottom>
-        Available Exercises Currently
+        Exercises for Workout
       </Typography>
+      
       <Box display="flex" justifyContent="flex-end" mb={2}>
-          <Button 
-            variant="contained" 
-            component={Link} 
-            to="/exercises/add" 
-            style={{ backgroundColor: 'cyan', color: '#000000' }}
-            sx={{ my: 1 }}
-          >
-            Add New Exercise
-          </Button>
+        <Button 
+          variant="contained" 
+          component={Link} 
+          to={`/workout/${workoutID}/add-exercises`}
+          style={{ backgroundColor: 'cyan', color: '#000000' }}
+          sx={{ my: 1 }}
+        >
+            Add Existing Exercise
+      </Button>
       </Box>
+
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
-      
           <TableHead>
             <TableRow>
               <StyledTableCell>Exercise Name</StyledTableCell>
@@ -101,7 +102,7 @@ const Exercises: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row: { exerciseName: string; muscleGroup: string; experienceLevel: string; setsReps: string; equipmentNeeded: string; }) => (
+            {rows.map((row) => (
               <StyledTableRow key={row.exerciseName}>
                 <StyledTableCell component="th" scope="row">
                   {row.exerciseName}
@@ -116,9 +117,8 @@ const Exercises: React.FC = () => {
         </Table>
       </TableContainer>
 
-     
     </div>
   );
 }
 
-export default Exercises;
+export default WorkoutExercises;

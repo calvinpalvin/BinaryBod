@@ -5,9 +5,11 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from './UserContext';
 
 const AddNutrition: React.FC = () => {
   const navigate = useNavigate();
+  const { user } = useUser();
   const [nutritionData, setNutritionData] = useState({
     userID: '', // Add userID to the initial state
     caloriesEaten: '',
@@ -32,7 +34,7 @@ const AddNutrition: React.FC = () => {
     // Set the userID before sending the request
     const nutritionDataWithID = {
       ...nutritionData,
-      userID: 10, // Replace with the actual user ID
+      userID: user?.id, // Replace with the actual user ID
     };
     axios.post('http://localhost:3000/nutrition/add', nutritionDataWithID)
       .then(response => {

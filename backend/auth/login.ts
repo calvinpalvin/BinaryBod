@@ -27,7 +27,7 @@ export const createLoginRoutes = (dbPool: Pool): Router => {
             }
 
             if (userResults.length === 0) {
-                return res.status(401).send('Invalid credentials');
+                return res.status(401).send('Invalid username');
             }
 
             const user = userResults[0];
@@ -42,7 +42,7 @@ export const createLoginRoutes = (dbPool: Pool): Router => {
                 }
 
                 if (passwordResults.length === 0) {
-                    return res.status(401).send('Invalid credentials');
+                    return res.status(401).send('Invalid password');
                 }
 
                 const storedHash = passwordResults[0].PasswordHash;
@@ -51,13 +51,13 @@ export const createLoginRoutes = (dbPool: Pool): Router => {
                 const isMatch = await bcrypt.compare(password, storedHash);
 
                 if (!isMatch) {
-                    return res.status(401).send('Invalid credentials');
+                    return res.status(401).send('Invalid password');
                 }
 
                 // Generate a new JWT token
                 const token = jwt.sign({ userID: user.UserID, username: user.Username }, SECRET_KEY, { expiresIn: '1h' });
 
-                res.status(200).json({ message: 'Login successful', token });
+                res.status(200).json({ message: 'Login successful', token, userID: user.UserID});
             });
         });
     });

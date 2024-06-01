@@ -76,7 +76,7 @@ export const createRoutes = (dbPool: Pool): Router => {
     // POST route to add exercises
     router.post('/exercises/add', (req, res) => {
         const {
-            exerciseID,
+            // exerciseID,
             exerciseName,
             workoutID,
             muscleGroup,
@@ -91,12 +91,12 @@ export const createRoutes = (dbPool: Pool): Router => {
         }
 
         const query = `
-            INSERT INTO exercises (Exercise_ID, Exercise_Name, Workout_ID, Muscle_Group, Experience_Level, Recommended_Sets_Reps, Equipment_Needed)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO exercises (Exercise_Name, Workout_ID, Muscle_Group, Experience_Level, Recommended_Sets_Reps, Equipment_Needed)
+            VALUES (?, ?, ?, ?, ?, ?)
         `;
 
         dbPool.query(query, [
-            exerciseID,
+            // exerciseID,
             exerciseName,
             workoutID,
             muscleGroup,
@@ -112,9 +112,61 @@ export const createRoutes = (dbPool: Pool): Router => {
         });
     });
 
-
-
-
+    router.post('/workout/:workoutID/add-exercise', (req, res) => {
+        const { workoutID } = req.params; // Extract workoutID from URL parameters
+        const { exerciseName } = req.body; // Extract exerciseName from request body
+      
+        console.log('Received workoutID:', workoutID);
+        console.log('Received exerciseName:', exerciseName);
+      
+        if (!workoutID || !exerciseName) {
+          console.log('Missing required parameters');
+          return res.status(400).send('Missing required parameters');
+        }
+      
+        // Query to get the exercise details based on the exerciseName
+        const getExerciseQuery = 'SELECT * FROM exercises WHERE Exercise_Name = ?';
+      
+        dbPool.query(getExerciseQuery, [exerciseName], (error, results) => {
+          if (error) {
+            console.error('Failed to find exercise:', error);
+            return res.status(500).send('Failed to find exercise');
+          }
+      
+          if (results.length === 0) {
+            console.log('Exercise not found');
+            return res.status(404).send('Exercise not found');
+          }
+      
+          const exercise = results[0];
+      
+          console.log('Found exercise:', exercise);
+      
+          // Insert the exercise details into the exercises table with the specified workoutID
+          const insertQuery = `
+            INSERT INTO exercises (Workout_ID, Exercise_Name, Muscle_Group, Experience_Level, Recommended_Sets_Reps, Equipment_Needed)
+            VALUES (?, ?, ?, ?, ?, ?)
+          `;
+      
+          dbPool.query(insertQuery, [
+            workoutID,
+            exercise.Exercise_Name,
+            exercise.Muscle_Group,
+            exercise.Experience_Level,
+            exercise.Recommended_Sets_Reps,
+            exercise.Equipment_Needed
+          ], (insertError, insertResults) => {
+            if (insertError) {
+              console.error('Failed to add exercise to workout:', insertError);
+              return res.status(500).send('Failed to add exercise to workout');
+            }
+            res.status(201).send('Exercise added to workout successfully');
+          });
+        });
+      });
+      
+      
+      
     // Route to get user info
     router.get('/user_info/:userID', (req, res) => {
         const query = `SELECT * FROM user_info WHERE UserID = ?`;
@@ -148,16 +200,14 @@ export const createRoutes = (dbPool: Pool): Router => {
     
     
     // Route to get exercise info
-    router.get('/exercise_info/:userID', (req, res) => {
+    router.get('/exercise_info/', (req, res) => {
         const query = `
             SELECT e.* 
             FROM exercises e
-            JOIN workouts w ON e.Workout_ID = w.Workout_ID
-            WHERE w.UserID = ?;`;
-        const userID = req.params.userID;
+            `;
 
     
-        dbPool.query(query, [userID], (error, results) => {
+        dbPool.query(query, (error, results) => {
             if (error) {
                 console.error('Failed to get exercise info for User', error);
                 return res.status(500).send('Failed to get exercise info for User');
@@ -166,7 +216,20 @@ export const createRoutes = (dbPool: Pool): Router => {
             res.status(200);
         });
     });
+
+   
     
+    router.get('/exercises/:workoutID', (req, res) => {
+        const query = 'SELECT * FROM exercises WHERE Workout_ID = ?';
+        const workoutID = req.params.workoutID;
+        dbPool.query(query, [workoutID], (error, results) => {
+            if (error) {
+                console.error('Failed to get exercises for workout:', error);
+                return res.status(500).send('Failed to get exercises for workout');
+            }
+            res.send(results);
+        });
+    });
     
     // Route to get nutrition info
     router.get('/nutrition_info/:userID', (req, res) => {
