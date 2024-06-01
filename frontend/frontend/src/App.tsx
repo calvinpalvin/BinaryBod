@@ -11,7 +11,7 @@ import Nutrition from './components/Nutrition';
 import AddNutrition from './components/AddNutrition';
 import SignUp from './components/SignUp';
 import SignIn from './components/SignIn';
-
+import WorkoutExercises from './components/WorkoutExercises';
 
 
 const App: React.FC = () => {
@@ -26,6 +26,9 @@ const App: React.FC = () => {
             <Route path="/dashboard" element={<Home />} />
             {/* <Route path="/account" element={<Home />} /> */}
             <Route path="/workouts" element={<Workouts />} />
+
+            <Route path="/exercises/:workoutID" element={<WorkoutExercises />} />
+
             <Route path="/workout/add" element={<AddWorkouts />} />
             <Route path="/exercises" element={<Exercises />} />
             <Route path="/exercises/add" element={<AddExercises />} />

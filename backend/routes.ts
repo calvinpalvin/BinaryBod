@@ -164,7 +164,19 @@ export const createRoutes = (dbPool: Pool): Router => {
             res.status(200);
         });
     });
+
     
+    router.get('/exercises/:workoutID', (req, res) => {
+        const query = 'SELECT * FROM exercises WHERE Workout_ID = ?';
+        const workoutID = req.params.workoutID;
+        dbPool.query(query, [workoutID], (error, results) => {
+            if (error) {
+                console.error('Failed to get exercises for workout:', error);
+                return res.status(500).send('Failed to get exercises for workout');
+            }
+            res.send(results);
+        });
+    });
     
     // Route to get nutrition info
     router.get('/nutrition_info/:userID', (req, res) => {

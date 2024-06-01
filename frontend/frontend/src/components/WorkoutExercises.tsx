@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -8,9 +9,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import axios from 'axios';
-import Button from '@mui/material/Button';
-import { Link, useNavigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import { useUser } from './UserContext';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -33,24 +33,23 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function createData(
-  workoutID: number,
-  workoutName: string,
+  exerciseName: string,
   muscleGroup: string,
   experienceLevel: string,
-  duration: number,
+  setsReps: string,
   equipmentNeeded: string,
 ) {
-  return { workoutID, workoutName, muscleGroup, experienceLevel, duration, equipmentNeeded };
+  return { exerciseName, muscleGroup, experienceLevel, setsReps, equipmentNeeded };
 }
 
-const Workouts: React.FC = () => {
+const WorkoutExercises: React.FC = () => {
+  const { workoutID } = useParams<{ workoutID: string }>();
   const [data, setData] = useState<any[]>([]);
   const { user } = useUser();
-  const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) {
-      axios.get(`http://localhost:3000/workout_info/${user.id}`)
+    if (user && workoutID) {
+      axios.get(`http://localhost:3000/exercises/${workoutID}`)
         .then(response => {
           setData(response.data);
         })
@@ -58,46 +57,45 @@ const Workouts: React.FC = () => {
           console.error('Error fetching data:', error);
         });
     }
-  }, [user]);
+  }, [user, workoutID]);
 
-  const rows = data.map((workout: { Workout_ID: number; Workout_Name: string; Muscle_Group: string; Experience_Level: string; Duration: number; Equipment_Needed: string; }) => 
-    createData(workout.Workout_ID, workout.Workout_Name, workout.Muscle_Group, workout.Experience_Level, workout.Duration, workout.Equipment_Needed)
+  const rows = data.map((exercise: { Exercise_Name: string; Muscle_Group: string; Experience_Level: string; Recommended_Sets_Reps: string; Equipment_Needed: string; }) => 
+    createData(exercise.Exercise_Name, exercise.Muscle_Group, exercise.Experience_Level, exercise.Recommended_Sets_Reps, exercise.Equipment_Needed)
   );
 
   if (!user) {
     return (
       <Typography variant="h6" align="center">
-      Please <Link to="/"> sign in</Link> to view your workouts.
+        Please <Link to="/">sign in</Link> to view your exercises.
       </Typography>
     );
   }
 
-  const handleRowClick = (workoutID: number) => {
-    navigate(`/exercises/${workoutID}`);
-  };
-
   return (
     <div>
+      <Typography variant="h4" align="center" gutterBottom>
+        Exercises for Workout {workoutID}
+      </Typography>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>Workout ID</StyledTableCell>
-              <StyledTableCell align="right">Workout Name</StyledTableCell>
+              <StyledTableCell>Exercise Name</StyledTableCell>
               <StyledTableCell align="right">Muscle Group</StyledTableCell>
               <StyledTableCell align="right">Experience Level</StyledTableCell>
-              <StyledTableCell align="right">Duration</StyledTableCell>
+              <StyledTableCell align="right">Recommended Sets & Reps</StyledTableCell>
               <StyledTableCell align="right">Equipment Needed</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {rows.map((row) => (
-              <StyledTableRow key={row.workoutID} onClick={() => handleRowClick(row.workoutID)} style={{ cursor: 'pointer' }}>
-                 <StyledTableCell component="th" scope="row">{row.workoutID}</StyledTableCell>
-                 <StyledTableCell align="right">{row.workoutName}</StyledTableCell>
+              <StyledTableRow key={row.exerciseName}>
+                <StyledTableCell component="th" scope="row">
+                  {row.exerciseName}
+                </StyledTableCell>
                 <StyledTableCell align="right">{row.muscleGroup}</StyledTableCell>
                 <StyledTableCell align="right">{row.experienceLevel}</StyledTableCell>
-                <StyledTableCell align="right">{row.duration}</StyledTableCell>
+                <StyledTableCell align="right">{row.setsReps}</StyledTableCell>
                 <StyledTableCell align="right">{row.equipmentNeeded}</StyledTableCell>
               </StyledTableRow>
             ))}
@@ -105,11 +103,11 @@ const Workouts: React.FC = () => {
         </Table>
       </TableContainer>
 
-      <Button variant="contained" component={Link} to="/workout/add">
-        Add Workout
+      <Button variant="contained" component={Link} to="/exercises/add">
+        Add Exercise
       </Button>
     </div>
   );
 }
 
-export default Workouts;
+export default WorkoutExercises;
