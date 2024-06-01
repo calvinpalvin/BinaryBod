@@ -74,8 +74,23 @@ const Exercises: React.FC = () => {
 
   return (
     <div>
+      <Typography variant="h4" align="center" gutterBottom>
+        Available Exercises Currently
+      </Typography>
+      <Box display="flex" justifyContent="flex-end" mb={2}>
+          <Button 
+            variant="contained" 
+            component={Link} 
+            to="/exercises/add" 
+            style={{ backgroundColor: 'cyan', color: '#000000' }}
+            sx={{ my: 1 }}
+          >
+            Add New Exercise
+          </Button>
+      </Box>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
+      
           <TableHead>
             <TableRow>
               <StyledTableCell>Exercise Name</StyledTableCell>
@@ -101,9 +116,7 @@ const Exercises: React.FC = () => {
         </Table>
       </TableContainer>
 
-      <Button variant="contained" component={Link} to="/exercises/add">
-        Add Exercise
-      </Button>
+     
     </div>
   );
 }

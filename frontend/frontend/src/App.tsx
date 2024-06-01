@@ -12,7 +12,7 @@ import AddNutrition from './components/AddNutrition';
 import SignUp from './components/SignUp';
 import SignIn from './components/SignIn';
 import WorkoutExercises from './components/WorkoutExercises';
-
+import AddExercisesToWorkout from './components/AddExercisesToWorkout';
 
 const App: React.FC = () => {
   return (
@@ -28,6 +28,7 @@ const App: React.FC = () => {
             <Route path="/workouts" element={<Workouts />} />
 
             <Route path="/exercises/:workoutID" element={<WorkoutExercises />} />
+            <Route path="/workout/:workoutID/add-exercises" element={<AddExercisesToWorkout />} />
 
             <Route path="/workout/add" element={<AddWorkouts />} />
             <Route path="/exercises" element={<Exercises />} />

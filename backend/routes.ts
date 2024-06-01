@@ -112,9 +112,61 @@ export const createRoutes = (dbPool: Pool): Router => {
         });
     });
 
-
-
-
+    router.post('/workout/:workoutID/add-exercise', (req, res) => {
+        const { workoutID } = req.params; // Extract workoutID from URL parameters
+        const { exerciseName } = req.body; // Extract exerciseName from request body
+      
+        console.log('Received workoutID:', workoutID);
+        console.log('Received exerciseName:', exerciseName);
+      
+        if (!workoutID || !exerciseName) {
+          console.log('Missing required parameters');
+          return res.status(400).send('Missing required parameters');
+        }
+      
+        // Query to get the exercise details based on the exerciseName
+        const getExerciseQuery = 'SELECT * FROM exercises WHERE Exercise_Name = ?';
+      
+        dbPool.query(getExerciseQuery, [exerciseName], (error, results) => {
+          if (error) {
+            console.error('Failed to find exercise:', error);
+            return res.status(500).send('Failed to find exercise');
+          }
+      
+          if (results.length === 0) {
+            console.log('Exercise not found');
+            return res.status(404).send('Exercise not found');
+          }
+      
+          const exercise = results[0];
+      
+          console.log('Found exercise:', exercise);
+      
+          // Insert the exercise details into the exercises table with the specified workoutID
+          const insertQuery = `
+            INSERT INTO exercises (Workout_ID, Exercise_Name, Muscle_Group, Experience_Level, Recommended_Sets_Reps, Equipment_Needed)
+            VALUES (?, ?, ?, ?, ?, ?)
+          `;
+      
+          dbPool.query(insertQuery, [
+            workoutID,
+            exercise.Exercise_Name,
+            exercise.Muscle_Group,
+            exercise.Experience_Level,
+            exercise.Recommended_Sets_Reps,
+            exercise.Equipment_Needed
+          ], (insertError, insertResults) => {
+            if (insertError) {
+              console.error('Failed to add exercise to workout:', insertError);
+              return res.status(500).send('Failed to add exercise to workout');
+            }
+            res.status(201).send('Exercise added to workout successfully');
+          });
+        });
+      });
+      
+      
+      
     // Route to get user info
     router.get('/user_info/:userID', (req, res) => {
         const query = `SELECT * FROM user_info WHERE UserID = ?`;
@@ -165,6 +217,7 @@ export const createRoutes = (dbPool: Pool): Router => {
         });
     });
 
+   
     
     router.get('/exercises/:workoutID', (req, res) => {
         const query = 'SELECT * FROM exercises WHERE Workout_ID = ?';

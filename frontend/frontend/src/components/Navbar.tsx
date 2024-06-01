@@ -37,9 +37,9 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ backgroundColor: 'purple' }}>
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
+      <Toolbar disableGutters sx={{ backgroundColor: 'purple' }}>
           <Typography
             variant="h6"
             noWrap
@@ -85,6 +85,7 @@ function ResponsiveAppBar() {
               onClose={handleCloseNavMenu}
               sx={{
                 display: { xs: 'block', md: 'none' },
+                bgcolor: 'purple', 
               }}
             >
               {pages.map((page) => (

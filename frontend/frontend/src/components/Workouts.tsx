@@ -12,6 +12,7 @@ import Button from '@mui/material/Button';
 import { Link, useNavigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import { useUser } from './UserContext';
+import Box from '@mui/material/Box';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -78,6 +79,20 @@ const Workouts: React.FC = () => {
 
   return (
     <div>
+      <Typography variant="h4" align="center" gutterBottom>
+        Users Workouts
+      </Typography>
+      <Box display="flex" justifyContent="flex-end" mb={2}>
+        <Button 
+          variant="contained" 
+          component={Link} 
+          to="/workout/add" 
+          style={{ backgroundColor: 'cyan', color: '#000000' }}
+          sx={{ my: 1 }}
+        >
+            Add Workouts
+      </Button>
+      </Box>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
@@ -105,9 +120,6 @@ const Workouts: React.FC = () => {
         </Table>
       </TableContainer>
 
-      <Button variant="contained" component={Link} to="/workout/add">
-        Add Workout
-      </Button>
     </div>
   );
 }

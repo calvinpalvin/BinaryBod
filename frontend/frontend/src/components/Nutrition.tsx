@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -75,6 +76,20 @@ const Nutrition: React.FC = () => {
 
   return (
     <div>
+      <Typography variant="h4" align="center" gutterBottom>
+        Nutrition
+      </Typography>
+      <Box display="flex" justifyContent="flex-end" mb={2}>
+        <Button 
+          variant="contained" 
+          component={Link} 
+          to="/nutrition/add" 
+          style={{ backgroundColor: 'cyan', color: '#000000' }}
+          sx={{ my: 1 }}
+        >
+            Add Nutrition Info
+      </Button>
+      </Box>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
@@ -105,9 +120,7 @@ const Nutrition: React.FC = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <Button variant="contained" component={Link} to="/nutrition/add">
-        Add Nutrition Info
-      </Button>
+  
     </div>
   );
 }

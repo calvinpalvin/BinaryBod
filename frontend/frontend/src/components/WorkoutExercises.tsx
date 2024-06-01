@@ -12,6 +12,7 @@ import axios from 'axios';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useUser } from './UserContext';
+import Box from '@mui/material/Box';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -74,8 +75,21 @@ const WorkoutExercises: React.FC = () => {
   return (
     <div>
       <Typography variant="h4" align="center" gutterBottom>
-        Exercises for Workout {workoutID}
+        Exercises for Workout
       </Typography>
+      
+      <Box display="flex" justifyContent="flex-end" mb={2}>
+        <Button 
+          variant="contained" 
+          component={Link} 
+          to={`/workout/${workoutID}/add-exercises`}
+          style={{ backgroundColor: 'cyan', color: '#000000' }}
+          sx={{ my: 1 }}
+        >
+            Add Existing Exercise
+      </Button>
+      </Box>
+
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
@@ -103,9 +117,6 @@ const WorkoutExercises: React.FC = () => {
         </Table>
       </TableContainer>
 
-      <Button variant="contained" component={Link} to="/exercises/add">
-        Add Exercise
-      </Button>
     </div>
   );
 }
