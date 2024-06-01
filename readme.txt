@@ -2,7 +2,7 @@ BinaryBod
 
 To run this project:
 
-First create the database locally through phpMyAdmin, using the `binaryBod.sql` file. Under privileges, add a new user with the username test, and password test. Make sure that the MySQL Database server is up and running.
+First create the database locally through phpMyAdmin, using the `binaryBod.sql` file. Under privileges, add a new user with the username test, and password test, and give them all priviliges. Make sure that the MySQL Database server is up and running.
 
 Second, after opening the project repository, open a terminal, and do `cd ~/BinaryBod/backend`, then do `npm install`. You may have to do `nom install --force`. Then, do the command `npm run start` to start the backend. 
 
