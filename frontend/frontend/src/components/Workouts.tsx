@@ -34,13 +34,14 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function createData(
+  workoutID: number,
   workoutName: string,
   muscleGroup: string,
   experienceLevel: string,
   duration: number,
   equipmentNeeded: string,
 ) {
-  return { workoutName, muscleGroup, experienceLevel, duration, equipmentNeeded };
+  return { workoutID, workoutName, muscleGroup, experienceLevel, duration, equipmentNeeded };
 }
 
 const Workouts: React.FC = () => {
@@ -59,8 +60,8 @@ const Workouts: React.FC = () => {
     }
   }, [user]);
 
-  const rows = data.map((workout: { Workout_Name: string; Muscle_Group: string; Experience_Level: string; Duration: number; Equipment_Needed: string; }) => 
-    createData(workout.Workout_Name, workout.Muscle_Group, workout.Experience_Level, workout.Duration, workout.Equipment_Needed)
+  const rows = data.map((workout: { Workout_ID: number; Workout_Name: string; Muscle_Group: string; Experience_Level: string; Duration: number; Equipment_Needed: string; }) => 
+    createData(workout.Workout_ID, workout.Workout_Name, workout.Muscle_Group, workout.Experience_Level, workout.Duration, workout.Equipment_Needed)
   );
 
   if (!user) {
@@ -77,7 +78,8 @@ const Workouts: React.FC = () => {
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>Workout Name</StyledTableCell>
+              <StyledTableCell>Workout ID</StyledTableCell>
+              <StyledTableCell align="right">Workout Name</StyledTableCell>
               <StyledTableCell align="right">Muscle Group</StyledTableCell>
               <StyledTableCell align="right">Experience Level</StyledTableCell>
               <StyledTableCell align="right">Duration</StyledTableCell>
@@ -85,11 +87,10 @@ const Workouts: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row: { workoutName: string; muscleGroup: string; experienceLevel: string; duration: string | number; equipmentNeeded: string; }) => (
-              <StyledTableRow key={row.workoutName}>
-                <StyledTableCell component="th" scope="row">
-                  {row.workoutName}
-                </StyledTableCell>
+            {rows.map((row: { workoutID: number; workoutName: string; muscleGroup: string; experienceLevel: string; duration: string | number; equipmentNeeded: string; }) => (
+              <StyledTableRow key={row.workoutID}>
+                 <StyledTableCell component="th" scope="row">{row.workoutID}</StyledTableCell>
+                 <StyledTableCell align="right">{row.workoutName}</StyledTableCell>
                 <StyledTableCell align="right">{row.muscleGroup}</StyledTableCell>
                 <StyledTableCell align="right">{row.experienceLevel}</StyledTableCell>
                 <StyledTableCell align="right">{row.duration}</StyledTableCell>

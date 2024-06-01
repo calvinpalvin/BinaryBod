@@ -50,7 +50,7 @@ const Exercises: React.FC = () => {
 
   useEffect(() => {
     if (user) {
-      axios.get(`http://localhost:3000/exercise_info/${user.id}`)
+      axios.get(`http://localhost:3000/exercise_info/`)
         .then(response => {
           setData(response.data);
         })

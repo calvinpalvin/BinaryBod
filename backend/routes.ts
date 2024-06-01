@@ -76,7 +76,7 @@ export const createRoutes = (dbPool: Pool): Router => {
     // POST route to add exercises
     router.post('/exercises/add', (req, res) => {
         const {
-            exerciseID,
+            // exerciseID,
             exerciseName,
             workoutID,
             muscleGroup,
@@ -91,12 +91,12 @@ export const createRoutes = (dbPool: Pool): Router => {
         }
 
         const query = `
-            INSERT INTO exercises (Exercise_ID, Exercise_Name, Workout_ID, Muscle_Group, Experience_Level, Recommended_Sets_Reps, Equipment_Needed)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO exercises (Exercise_Name, Workout_ID, Muscle_Group, Experience_Level, Recommended_Sets_Reps, Equipment_Needed)
+            VALUES (?, ?, ?, ?, ?, ?)
         `;
 
         dbPool.query(query, [
-            exerciseID,
+            // exerciseID,
             exerciseName,
             workoutID,
             muscleGroup,
@@ -148,16 +148,14 @@ export const createRoutes = (dbPool: Pool): Router => {
     
     
     // Route to get exercise info
-    router.get('/exercise_info/:userID', (req, res) => {
+    router.get('/exercise_info/', (req, res) => {
         const query = `
             SELECT e.* 
             FROM exercises e
-            JOIN workouts w ON e.Workout_ID = w.Workout_ID
-            WHERE w.UserID = ?;`;
-        const userID = req.params.userID;
+            `;
 
     
-        dbPool.query(query, [userID], (error, results) => {
+        dbPool.query(query, (error, results) => {
             if (error) {
                 console.error('Failed to get exercise info for User', error);
                 return res.status(500).send('Failed to get exercise info for User');

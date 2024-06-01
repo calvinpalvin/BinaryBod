@@ -34,7 +34,7 @@ const AddExercises: React.FC = () => {
     const exerciseDataWithIDs = {
       ...exerciseData,
       // exerciseID: 26, // Set the exercise ID
-      workoutID: 11, // Set the workoutID
+      // workoutID: 11, // Set the workoutID
       recommendedSetsReps: `${exerciseData.sets} sets of ${exerciseData.reps} reps`
     };
     axios.post('http://localhost:3000/exercises/add', exerciseDataWithIDs)
@@ -96,6 +96,14 @@ const AddExercises: React.FC = () => {
         label="Exercise Name"
         name="exerciseName"
         value={exerciseData.exerciseName}
+        onChange={handleChange}
+        required
+        fullWidth
+      />
+      <TextField
+        label="Workout ID"
+        name="workoutID"
+        value={exerciseData.workoutID}
         onChange={handleChange}
         required
         fullWidth
